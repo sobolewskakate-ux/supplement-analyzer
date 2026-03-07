@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Supplement Stack Analyzer</title>
+  <style>
+    body {
+      font-family: -apple-system, sans-serif;
+      max-width: 750px;
+      margin: 60px auto;
+      padding: 0 20px;
+      background: #f5f5f7;
+      color: #1d1d1f;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.3rem; }
+    p.subtitle { color: #6e6e73; margin-top: 0; }
+    textarea {
+      width: 100%;
+      height: 130px;
+      font-size: 1rem;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      resize: vertical;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    button {
+      margin-top: 12px;
+      padding: 12px 28px;
+      background: #0071e3;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover { background: #0077ed; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    #result {
+      margin-top: 30px;
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      white-space: pre-wrap; /* Preserves line breaks from Claude's response */
+      line-height: 1.7;
+      display: none;
+    }
+    #loading { margin-top: 20px; color: #6e6e73; display: none; }
+    .disclaimer {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: #6e6e73;
+      border-top: 1px solid #ddd;
+      padding-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💊 Supplement Stack Analyzer</h1>
+  <p class="subtitle">Enter your supplements below and get an AI-powered breakdown of interactions, redundancies, and evidence quality.</p>
+
+  <textarea 
+    id="supplementInput" 
+    placeholder="e.g. Vitamin D3 5000IU, Magnesium Glycinate 400mg, Omega-3 2g, Ashwagandha 600mg, Zinc 25mg..."
+  ></textarea>
+
+  <br>
+  <button id="analyzeBtn" onclick="analyze()">Analyze My Stack</button>
+
+  <p id="loading">⏳ Analyzing your stack — this takes about 10 seconds...</p>
+
+  <div id="result"></div>
+
+  <script>
+    async function analyze() {
+      const input = document.getElementById('supplementInput').value.trim();
+      
+      if (!input) {
+        alert('Please enter at least one supplement.');
+        return;
+      }
+
+      // Show loading state, disable button
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('analyzeBtn').disabled = true;
+
+      // Send the supplements to your backend server
+      const response = await fetch('http://localhost:3001/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ supplements: input })
+      });
+
+      const data = await response.json();
+
+      // Display the result
+      document.getElementById('result').innerHTML = 
+        data.result + 
+        '<div class="disclaimer">⚠️ This tool is for informational purposes only. Always consult a qualified healthcare professional before changing your supplement regimen.</div>';
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('analyzeBtn').disabled = false;
+    }
+  </script>
+
+</body>
+</html>
