@@ -66,8 +66,8 @@ export function SupplementAnalyzer() {
     
     try {
       // Call your backend API endpoint here
-      //const response = await fetch('https://supplement-analyzer-vows.onrender.com/analyze', {
-      const response = await fetch('http://localhost:3001/analyze', {
+      const response = await fetch('https://supplement-analyzer-vows.onrender.com/analyze', {
+      //const response = await fetch('http://localhost:3001/analyze', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
