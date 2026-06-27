@@ -8,7 +8,28 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health check endpoint — Cloud Run uses this to know your service is alive
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    service: 'supplement-analyzer',
+    version: '1.0.0'
+  });
+});
+
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+// Structured logger — outputs JSON that Cloud Logging can parse and index
+const log = {
+  info: (message, data = {}) => console.log(JSON.stringify({ 
+    severity: 'INFO', message, ...data, timestamp: new Date().toISOString() 
+  })),
+  error: (message, data = {}) => console.error(JSON.stringify({ 
+    severity: 'ERROR', message, ...data, timestamp: new Date().toISOString() 
+  }))
+};
+
 
 app.post('/analyze', async (req, res) => {
   console.log('REQUEST RECEIVED:', req.body); 
@@ -39,7 +60,7 @@ RECOMMENDATIONS: Give 3 to 5 practical plain-English recommendations based on yo
 
 
     const completion = await groq.chat.completions.create({
-      model: 'moonshotai/kimi-k2-instruct-0905',
+      model: 'openai/gpt-oss-120b',
       messages: [{ role: 'user', content: prompt }],
       response_format: {
         type: "json_schema",
@@ -105,11 +126,12 @@ RECOMMENDATIONS: Give 3 to 5 practical plain-English recommendations based on yo
     res.json({ result: rawText });
 
   } catch (error) {
-    console.error('Groq error:', error.message);
-    res.status(500).json({ error: error.message });
+   log.info('Analysis request received', { supplementCount: supplements.length });
+    log.error('Analysis failed', { error: error.message });
   }
 });
 
-app.listen(3001, () => {
-  console.log('Server running on http://localhost:3001');
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
