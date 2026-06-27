@@ -126,8 +126,8 @@ RECOMMENDATIONS: Give 3 to 5 practical plain-English recommendations based on yo
     res.json({ result: rawText });
 
   } catch (error) {
-   log.info('Analysis request received', { supplementCount: supplements.length });
     log.error('Analysis failed', { error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
