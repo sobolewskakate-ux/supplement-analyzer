@@ -127,12 +127,12 @@ export function SupplementAnalyzer() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 pb-10">
-      <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl shadow-xl px-8 py-12 mb-8 text-center">
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <FlaskConical className="w-10 h-10 text-indigo-200" />
-          <h1 className="text-4xl font-semibold text-white">Supplement Stack Analyzer</h1>
+      <div className="pt-12 pb-8 mb-6 text-center border-b border-gray-200">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <FlaskConical className="w-7 h-7 text-gray-400" />
+          <h1 className="text-3xl font-medium text-gray-900">Supplement Stack Analyzer</h1>
         </div>
-        <p className="text-indigo-200 text-lg">
+        <p className="text-gray-500">
           Analyze your supplements for interactions, redundancies, and evidence quality
         </p>
       </div>
