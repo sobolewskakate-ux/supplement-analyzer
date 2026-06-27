@@ -126,13 +126,13 @@ export function SupplementAnalyzer() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-5xl">
-      <div className="mb-8 text-center">
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <FlaskConical className="w-8 h-8 text-indigo-600" />
-          <h1 className="text-4xl text-gray-900">Supplement Stack Analyzer</h1>
+    <div className="max-w-5xl mx-auto px-4 pb-10">
+      <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl shadow-xl px-8 py-12 mb-8 text-center">
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <FlaskConical className="w-10 h-10 text-indigo-200" />
+          <h1 className="text-4xl font-semibold text-white">Supplement Stack Analyzer</h1>
         </div>
-        <p className="text-gray-600">
+        <p className="text-indigo-200 text-lg">
           Analyze your supplements for interactions, redundancies, and evidence quality
         </p>
       </div>
@@ -141,7 +141,7 @@ export function SupplementAnalyzer() {
         <CardHeader>
           <CardTitle>Enter Your Supplements</CardTitle>
           <CardDescription>
-            Add each supplement you're currently taking, one at a time
+            Add each supplement you're currently taking
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -150,7 +150,7 @@ export function SupplementAnalyzer() {
               placeholder="e.g., Vitamin D, Omega-3 Fish Oil, Magnesium..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               className="flex-1"
               rows={2}
             />
@@ -206,139 +206,141 @@ export function SupplementAnalyzer() {
       </Card>
 
       {analysis && (
-        <div className="space-y-6 animate-in fade-in duration-500">
-          {/* Interactions */}
-          <Card className="shadow-lg border-l-4 border-l-orange-500">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-orange-700">
-                <AlertTriangle className="w-5 h-5" />
-                Interactions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {analysis.interactions.length === 0 ? (
-                <p className="text-gray-600">No significant interactions detected.</p>
-              ) : (
-                <ul className="space-y-3">
-                  {analysis.interactions.map((interaction, index) => (
-                    <li key={index} className="flex gap-3">
-                      <div className="mt-1">
-                        {interaction.type === 'positive' ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
-                        ) : (
-                          <AlertTriangle className="w-5 h-5 text-orange-600" />
-                        )}
-                      </div>
-                      <div>
+        <div className="space-y-4 animate-in fade-in duration-500">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Interactions */}
+            <Card className="shadow-lg border-l-4 border-l-orange-500">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-orange-700">
+                  <AlertTriangle className="w-5 h-5" />
+                  Interactions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {analysis.interactions.length === 0 ? (
+                  <p className="text-gray-600">No significant interactions detected.</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {analysis.interactions.map((interaction, index) => (
+                      <li key={index} className="flex gap-3">
+                        <div className="mt-1">
+                          {interaction.type === 'positive' ? (
+                            <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          ) : (
+                            <AlertTriangle className="w-5 h-5 text-orange-600" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">
+                            {interaction.supplements.join(' + ')}
+                          </p>
+                          <p className="text-gray-600 text-sm mt-1">
+                            {interaction.description}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Redundancies */}
+            <Card className="shadow-lg border-l-4 border-l-yellow-500">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-yellow-700">
+                  <Copy className="w-5 h-5" />
+                  Redundancies
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {analysis.redundancies.length === 0 ? (
+                  <p className="text-gray-600">No redundancies detected.</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {analysis.redundancies.map((redundancy, index) => (
+                      <li key={index} className="border-l-2 border-yellow-300 pl-4 py-2">
                         <p className="font-medium text-gray-900">
-                          {interaction.supplements.join(' + ')}
+                          {redundancy.supplements.join(', ')}
                         </p>
                         <p className="text-gray-600 text-sm mt-1">
-                          {interaction.description}
+                          {redundancy.reason}
                         </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CardContent>
-          </Card>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardContent>
+            </Card>
 
-          {/* Redundancies */}
-          <Card className="shadow-lg border-l-4 border-l-yellow-500">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-yellow-700">
-                <Copy className="w-5 h-5" />
-                Redundancies
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {analysis.redundancies.length === 0 ? (
-                <p className="text-gray-600">No redundancies detected.</p>
-              ) : (
-                <ul className="space-y-3">
-                  {analysis.redundancies.map((redundancy, index) => (
-                    <li key={index} className="border-l-2 border-yellow-300 pl-4 py-2">
-                      <p className="font-medium text-gray-900">
-                        {redundancy.supplements.join(', ')}
-                      </p>
-                      <p className="text-gray-600 text-sm mt-1">
-                        {redundancy.reason}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Evidence Quality */}
-          <Card className="shadow-lg border-l-4 border-l-blue-500">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-blue-700">
-                <FileCheck className="w-5 h-5" />
-                Evidence Quality
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {analysis.evidenceQuality.map((item, index) => (
-                  <div 
-                    key={index} 
-                    className="flex items-start justify-between gap-4 pb-3 border-b border-gray-200 last:border-0"
-                  >
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900">{item.supplement}</p>
-                      <p className="text-sm text-gray-600 mt-1">{item.reason}</p>
-                    </div>
-                    <Badge 
-                      variant={
-                        item.rating === 'Strong' ? 'default' :
-                        item.rating === 'Moderate' ? 'secondary' :
-                        'outline'
-                      }
-                      className={
-                        item.rating === 'Strong' ? 'bg-green-600' :
-                        item.rating === 'Moderate' ? 'bg-blue-500' :
-                        item.rating === 'Weak' ? 'bg-orange-500 text-white' :
-                        'bg-gray-400 text-white'
-                      }
+            {/* Evidence Quality */}
+            <Card className="shadow-lg border-l-4 border-l-blue-500">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-blue-700">
+                  <FileCheck className="w-5 h-5" />
+                  Evidence Quality
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {analysis.evidenceQuality.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start justify-between gap-4 pb-3 border-b border-gray-200 last:border-0"
                     >
-                      {item.rating}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900">{item.supplement}</p>
+                        <p className="text-sm text-gray-600 mt-1">{item.reason}</p>
+                      </div>
+                      <Badge
+                        variant={
+                          item.rating === 'Strong' ? 'default' :
+                          item.rating === 'Moderate' ? 'secondary' :
+                          'outline'
+                        }
+                        className={
+                          item.rating === 'Strong' ? 'bg-green-600' :
+                          item.rating === 'Moderate' ? 'bg-blue-500' :
+                          item.rating === 'Weak' ? 'bg-orange-500 text-white' :
+                          'bg-gray-400 text-white'
+                        }
+                      >
+                        {item.rating}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Recommendations */}
-          <Card className="shadow-lg border-l-4 border-l-green-500">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-green-700">
-                <Lightbulb className="w-5 h-5" />
-                Recommendations
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3">
-                {analysis.recommendations.map((recommendation, index) => (
-                  <li key={index} className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-medium">
-                      {index + 1}
-                    </span>
-                    <p className="text-gray-700 pt-0.5">{recommendation}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+            {/* Recommendations */}
+            <Card className="shadow-lg border-l-4 border-l-green-500">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-green-700">
+                  <Lightbulb className="w-5 h-5" />
+                  Recommendations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {analysis.recommendations.map((recommendation, index) => (
+                    <li key={index} className="flex gap-3">
+                      <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-medium">
+                        {index + 1}
+                      </span>
+                      <p className="text-gray-700 pt-0.5">{recommendation}</p>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Disclaimer */}
           <Alert className="border-red-200 bg-red-50">
             <AlertTriangle className="h-4 w-4 text-red-600" />
             <AlertDescription className="text-red-800">
-              <strong>Important:</strong> This analysis is for informational purposes only. 
+              <strong>Important:</strong> This analysis is for informational purposes only.
               Always consult a healthcare professional before making changes to your supplement regimen.
             </AlertDescription>
           </Alert>
