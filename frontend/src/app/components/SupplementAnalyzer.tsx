@@ -127,19 +127,22 @@ export function SupplementAnalyzer() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 pb-10">
-      <div className="pt-12 pb-8 mb-6 text-center border-b border-gray-200">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <FlaskConical className="w-7 h-7 text-gray-400" />
-          <h1 className="text-3xl font-medium text-gray-900">Supplement Stack Analyzer</h1>
+      <div className="pt-14 pb-10 mb-8 text-center">
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-red-600 rounded-full mb-5">
+          <FlaskConical className="w-7 h-7 text-white" />
         </div>
-        <p className="text-gray-500">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 uppercase mb-3">
+          Supplement Stack Analyzer
+        </h1>
+        <p className="text-gray-500 max-w-lg mx-auto">
           Analyze your supplements for interactions, redundancies, and evidence quality
         </p>
+        <div className="mt-5 mx-auto w-10 h-1 bg-red-600 rounded-full" />
       </div>
 
-      <Card className="mb-6 shadow-lg">
+      <Card className="mb-8 shadow-sm border border-gray-200">
         <CardHeader>
-          <CardTitle>Enter Your Supplements</CardTitle>
+          <CardTitle className="text-lg font-bold tracking-wide uppercase text-gray-800">Enter Your Supplements</CardTitle>
           <CardDescription>
             Add each supplement you're currently taking
           </CardDescription>
@@ -154,10 +157,10 @@ export function SupplementAnalyzer() {
               className="flex-1"
               rows={2}
             />
-            <Button 
-              onClick={handleAddSupplement} 
+            <Button
+              onClick={handleAddSupplement}
               disabled={!inputText.trim()}
-              className="self-end"
+              className="self-end rounded-full bg-red-600 hover:bg-red-700 text-white px-5"
             >
               <PlusCircle className="w-4 h-4 mr-2" />
               Add
@@ -165,18 +168,17 @@ export function SupplementAnalyzer() {
           </div>
 
           {supplements.length > 0 && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex flex-wrap gap-2">
                 {supplements.map((supplement, index) => (
-                  <Badge 
-                    key={index} 
-                    variant="secondary" 
-                    className="px-3 py-1.5 text-sm flex items-center gap-2"
+                  <Badge
+                    key={index}
+                    className="px-3 py-1.5 text-sm flex items-center gap-2 bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 rounded-full"
                   >
                     {supplement}
                     <button
                       onClick={() => handleRemoveSupplement(index)}
-                      className="hover:text-red-600 transition-colors"
+                      className="hover:text-red-900 transition-colors"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -184,18 +186,19 @@ export function SupplementAnalyzer() {
                 ))}
               </div>
 
-              <div className="flex gap-2 pt-2">
-                <Button 
-                  onClick={handleAnalyze} 
+              <div className="flex gap-3 pt-1">
+                <Button
+                  onClick={handleAnalyze}
                   disabled={isAnalyzing}
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-700"
+                  className="flex-1 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold tracking-wide uppercase"
                 >
                   {isAnalyzing ? "Analyzing..." : "Analyze Stack"}
                 </Button>
-                <Button 
-                  onClick={handleClear} 
+                <Button
+                  onClick={handleClear}
                   variant="outline"
                   disabled={isAnalyzing}
+                  className="rounded-full border-gray-300 text-gray-600 hover:bg-gray-50"
                 >
                   Clear All
                 </Button>
@@ -209,10 +212,10 @@ export function SupplementAnalyzer() {
         <div className="space-y-4 animate-in fade-in duration-500">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Interactions */}
-            <Card className="shadow-lg border-l-4 border-l-orange-500">
+            <Card className="shadow-sm border border-gray-200">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-orange-700">
-                  <AlertTriangle className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-gray-900 font-bold uppercase tracking-wide text-base">
+                  <AlertTriangle className="w-5 h-5 text-orange-500" />
                   Interactions
                 </CardTitle>
               </CardHeader>
@@ -246,10 +249,10 @@ export function SupplementAnalyzer() {
             </Card>
 
             {/* Redundancies */}
-            <Card className="shadow-lg border-l-4 border-l-yellow-500">
+            <Card className="shadow-sm border border-gray-200">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-yellow-700">
-                  <Copy className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-gray-900 font-bold uppercase tracking-wide text-base">
+                  <Copy className="w-5 h-5 text-yellow-500" />
                   Redundancies
                 </CardTitle>
               </CardHeader>
@@ -274,10 +277,10 @@ export function SupplementAnalyzer() {
             </Card>
 
             {/* Evidence Quality */}
-            <Card className="shadow-lg border-l-4 border-l-blue-500">
+            <Card className="shadow-sm border border-gray-200">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-blue-700">
-                  <FileCheck className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-gray-900 font-bold uppercase tracking-wide text-base">
+                  <FileCheck className="w-5 h-5 text-blue-500" />
                   Evidence Quality
                 </CardTitle>
               </CardHeader>
@@ -314,10 +317,10 @@ export function SupplementAnalyzer() {
             </Card>
 
             {/* Recommendations */}
-            <Card className="shadow-lg border-l-4 border-l-green-500">
+            <Card className="shadow-sm border border-gray-200">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-green-700">
-                  <Lightbulb className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-gray-900 font-bold uppercase tracking-wide text-base">
+                  <Lightbulb className="w-5 h-5 text-green-500" />
                   Recommendations
                 </CardTitle>
               </CardHeader>
@@ -325,7 +328,7 @@ export function SupplementAnalyzer() {
                 <ul className="space-y-3">
                   {analysis.recommendations.map((recommendation, index) => (
                     <li key={index} className="flex gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-medium">
+                      <span className="flex-shrink-0 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
                         {index + 1}
                       </span>
                       <p className="text-gray-700 pt-0.5">{recommendation}</p>
