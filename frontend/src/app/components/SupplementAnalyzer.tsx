@@ -173,7 +173,7 @@ export function SupplementAnalyzer() {
                 {supplements.map((supplement, index) => (
                   <Badge
                     key={index}
-                    className="px-3 py-1.5 text-sm flex items-center gap-2 bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 rounded-full"
+                    className="px-3 py-1.5 text-sm flex items-center gap-2 bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 rounded-full"
                   >
                     {supplement}
                     <button
