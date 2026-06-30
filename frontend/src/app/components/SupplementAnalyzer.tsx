@@ -4,12 +4,13 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { Badge } from "./ui/badge";
 import { Alert, AlertDescription } from "./ui/alert";
-import { 
-  AlertTriangle, 
-  CheckCircle2, 
-  Copy, 
-  FileCheck, 
-  Lightbulb, 
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Copy,
+  FileCheck,
+  Info,
+  Lightbulb,
   PlusCircle,
   FlaskConical,
   X
@@ -33,6 +34,7 @@ export interface EvidenceQuality {
 }
 
 export interface AnalysisReport {
+  excludedItems: string[];
   interactions: Interaction[];
   redundancies: Redundancy[];
   evidenceQuality: EvidenceQuality[];
@@ -210,6 +212,16 @@ export function SupplementAnalyzer() {
 
       {analysis && (
         <div className="space-y-4 animate-in fade-in duration-500">
+          {analysis.excludedItems.length > 0 && (
+            <Alert className="border-amber-200 bg-amber-50">
+              <Info className="h-4 w-4 text-amber-600" />
+              <AlertDescription className="text-amber-800">
+                <strong>Some items were not analysed:</strong>{" "}
+                {analysis.excludedItems.join(", ")} —{" "}
+                {analysis.excludedItems.length === 1 ? "this item was" : "these items were"} not recognised as a supplement or food and {analysis.excludedItems.length === 1 ? "has" : "have"} been excluded from the analysis.
+              </AlertDescription>
+            </Alert>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Interactions */}
             <Card className="shadow-sm border border-gray-200">

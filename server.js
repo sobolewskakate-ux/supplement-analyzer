@@ -38,9 +38,11 @@ app.post('/analyze', async (req, res) => {
 
     const prompt = `You are a knowledgeable supplement and nutrition expert.
 
-Analyze the following supplements: ${supplements}
+The user submitted this list: ${supplements}
 
-Perform a thorough analysis covering:
+STEP 1 — FILTER: Review every item and decide whether it is a supplement, vitamin, mineral, herb, food, or beverage. Anything that is clearly not one of those (e.g. a random word, a medication, a non-food object, nonsense text) must be placed in "excludedItems" and completely left out of the analysis sections below. Only analyse items that pass this filter.
+
+STEP 2 — ANALYSE the remaining relevant items covering:
 
 INTERACTIONS: Identify all known interactions between these supplements. Include both:
 - Positive synergies (e.g. Vitamin D3 enhances Magnesium absorption, Vitamin C improves Iron absorption)
@@ -49,7 +51,7 @@ Be specific about exactly which supplements interact with each other and why.
 
 REDUNDANCIES: Identify any supplements that overlap in function or nutrients, meaning the user may be doubling up unnecessarily. For example, if someone takes both a Vitamin B complex and individual B12, that is a redundancy.
 
-EVIDENCE QUALITY: For each supplement listed, rate the scientific evidence supporting its most common use:
+EVIDENCE QUALITY: For each relevant supplement listed, rate the scientific evidence supporting its most common use:
 - Strong: Multiple large randomised controlled trials support its use
 - Moderate: Some good studies exist but evidence is mixed or limited
 - Weak: Only small or low quality studies exist
@@ -70,6 +72,10 @@ RECOMMENDATIONS: Give 3 to 5 practical plain-English recommendations based on yo
           schema: {
             type: "object",
             properties: {
+              excludedItems: {
+                type: "array",
+                items: { type: "string" }
+              },
               interactions: {
                 type: "array",
                 items: {
@@ -113,7 +119,7 @@ RECOMMENDATIONS: Give 3 to 5 practical plain-English recommendations based on yo
                 items: { type: "string" }
               }
             },
-            required: ["interactions", "redundancies", "evidenceQuality", "recommendations"],
+            required: ["excludedItems", "interactions", "redundancies", "evidenceQuality", "recommendations"],
             additionalProperties: false
           }
         }
